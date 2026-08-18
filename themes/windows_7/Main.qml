@@ -5,6 +5,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     // Wayland Cursor Fix
     MouseArea {
         anchors.fill: parent
@@ -58,7 +60,7 @@ Rectangle {
     NumberAnimation { id: bootAnim; target: root; property: "fadeIn"; from: 0; to: 1; duration: 700; easing.type: Easing.OutCubic }
 
     // Visuals
-    Image { id: bg; anchors.fill: parent; source: "background.png"; fillMode: Image.PreserveAspectCrop; opacity: root.fadeIn }
+    Image { id: bg; anchors.fill: parent; source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "background.png"; fillMode: Image.PreserveAspectCrop; opacity: root.fadeIn }
 
     RadialGradient {
         anchors.fill: parent; opacity: 0.35 * root.fadeIn

@@ -5,6 +5,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     id: root
     width: Screen.width
     height: Screen.height

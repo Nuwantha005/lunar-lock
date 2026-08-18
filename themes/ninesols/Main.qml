@@ -7,6 +7,8 @@ import SddmComponents 2.0
 
 // Root setup
 Rectangle {
+    property string overrideBg: ""
+
     id: root
     width: Screen.width; height: Screen.height
     readonly property real s: height / 768
@@ -78,7 +80,7 @@ Rectangle {
     // Backdrop image
     Image {
         anchors.fill: parent
-        source: "bg.png"
+        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         opacity: root.ui

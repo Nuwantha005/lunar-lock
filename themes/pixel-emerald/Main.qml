@@ -6,6 +6,8 @@ import SddmComponents 2.0
 
 // Pixel Emerald
 Rectangle {
+    property string overrideBg: ""
+
     MouseArea { anchors.fill: parent; cursorShape: Qt.ArrowCursor; z: -1 }
 
     readonly property real s: Screen.height / 768

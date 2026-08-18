@@ -6,6 +6,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     // Wayland Cursor Fix
     MouseArea {
         anchors.fill: parent
@@ -57,7 +59,15 @@ Rectangle {
     // Visuals
     Item {
         id: bgContainer; anchors.fill: parent; clip: true
-        MediaPlayer { id: bgVideoPlayer; source: "bg.mp4"; loops: MediaPlayer.Infinite; autoPlay: true; videoOutput: bgVideoOutput }
+        MediaPlayer { id: bgVideoPlayer; source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"; loops: MediaPlayer.Infinite; autoPlay: true; videoOutput: bgVideoOutput }
+        Image {
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
+            source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            z: -499
+        }
         VideoOutput { id: bgVideoOutput; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop }
 
         Rectangle {

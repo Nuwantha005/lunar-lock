@@ -8,6 +8,8 @@ import SddmComponents 2.0
 import Qt.labs.settings 1.0
 
 Rectangle {
+    property string overrideBg: ""
+
     id: root
 
     // Wayland Fix
@@ -140,7 +142,7 @@ Rectangle {
     // Background
     Image {
         id: bgImage; anchors.fill:parent
-        source: root.bgFiles[root.bgIndex]
+        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : root.bgFiles[root.bgIndex]
         fillMode: Image.PreserveAspectCrop; asynchronous: true
         opacity: root.loginSuccess ? 0.1 : (root.gameActive ? 0.18 : 0.55)
         Behavior on opacity { NumberAnimation { duration:800 } }

@@ -5,6 +5,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     id: root
     width: Screen.width
     height: Screen.height
@@ -15,6 +17,14 @@ Rectangle {
             GradientStop { position: 1.0; color: "#d2d6d9" }
         }
         z: -100
+    }
+
+    Image {
+        anchors.fill: parent
+        visible: root.overrideBg !== ""
+        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        fillMode: Image.PreserveAspectCrop
+        z: -99
     }
 
     readonly property real s: Screen.height / 768

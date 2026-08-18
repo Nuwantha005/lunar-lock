@@ -5,6 +5,8 @@ import SddmComponents 2.0
 
 // Skyscrapers Layout
 Rectangle {
+    property string overrideBg: ""
+
     // Wayland Cursor Fix
     MouseArea {
         anchors.fill: parent

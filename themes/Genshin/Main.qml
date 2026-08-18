@@ -6,6 +6,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     id: root
     readonly property real s: (Screen.height / 768) * 0.75
     width: Screen.width
@@ -114,11 +116,21 @@ Rectangle {
 
         MediaPlayer {
             id: bgVideoPlayer
-            source: root.bgVideo
+            source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : root.bgVideo
             loops: MediaPlayer.Infinite
             autoPlay: true
             videoOutput: bgVideoOutput
         }
+
+        Image {
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
+            source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            fillMode: Image.PreserveAspectCrop
+            asynchronous: true
+            z: -499
+        }
+
         VideoOutput {
             id: bgVideoOutput
             anchors.fill: parent

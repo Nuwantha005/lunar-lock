@@ -17,6 +17,8 @@ Rectangle {
     height: Screen.height
     color:  "#c0bc9e"
 
+    property string overrideBg: ""
+
     // Colors
     readonly property color nierBg:        "#c0bc9e"
     readonly property color nierDarker:    "#1a1814"
@@ -82,7 +84,9 @@ Rectangle {
         anchors.fill: parent; color: root.nierBg
 
         Image {
-            anchors.fill: parent; source: config.background; fillMode: Image.PreserveAspectCrop
+            anchors.fill: parent
+            source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : config.background
+            fillMode: Image.PreserveAspectCrop
             asynchronous: true; opacity: 0.92
         }
 

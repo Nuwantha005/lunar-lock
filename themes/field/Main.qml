@@ -5,6 +5,8 @@ import Qt.labs.folderlistmodel
 import SddmComponents 2.0
 
 Rectangle {
+    property string overrideBg: ""
+
     // Wayland Cursor Fix
     MouseArea {
         anchors.fill: parent
@@ -37,7 +39,7 @@ Rectangle {
 
     // Background
     Image {
-        anchors.fill: parent; source: "bg.png"
+        anchors.fill: parent; source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop; asynchronous: true; opacity: root.ui
     }
     Rectangle {

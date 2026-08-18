@@ -6,6 +6,8 @@ import SddmComponents 2.0
 
 // Theme
 Rectangle {
+    property string overrideBg: ""
+
     // Wayland Cursor Fix
     MouseArea {
         anchors.fill: parent
@@ -46,7 +48,7 @@ Rectangle {
     // Background
     Image {
         anchors.fill: parent
-        source: "bg.png"
+        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         opacity: root.ui
