@@ -72,7 +72,7 @@ Rectangle {
 
     Component.onCompleted: {
         fadeAnim.start();
-        keyboard.numLock = true;
+        if (typeof keyboard !== "undefined") keyboard.numLock = true;
     }
 
     NumberAnimation {

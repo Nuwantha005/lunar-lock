@@ -70,20 +70,22 @@ Rectangle {
     Rectangle { anchors.fill: parent; color: "#000000"; z: -1000 }
     
     MediaPlayer { 
-        id: player; source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"; videoOutput: bgVideo; loops: MediaPlayer.Infinite
-        Component.onCompleted: player.play()
+        id: player
+        autoPlay: true; source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"; videoOutput: bgVideo; loops: MediaPlayer.Infinite
+        
     }
     
     Image {
         anchors.fill: parent
         visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         z: -499
     }
 
-    VideoOutput { 
+    VideoOutput {
+        visible: root.overrideBg === "" || (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) 
         id: bgVideo; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop; z: -500 
     }
     
@@ -323,5 +325,5 @@ Rectangle {
     }
 
     Timer { interval: 300; running: true; onTriggered: passInput.forceActiveFocus() }
-    Component.onCompleted: keyboard.numLock = true
+    Component.onCompleted: if (typeof keyboard !== "undefined") keyboard.numLock = true
 }

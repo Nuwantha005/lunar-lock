@@ -12,6 +12,7 @@ Rectangle {
     height: Screen.height
     Rectangle {
         anchors.fill: parent
+        visible: root.overrideBg === ""
         gradient: Gradient {
             GradientStop { position: 0.0; color: "#e8ebed" }
             GradientStop { position: 1.0; color: "#d2d6d9" }

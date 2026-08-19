@@ -81,7 +81,7 @@ Item {
     }
 
     Component.onCompleted: {
-        keyboard.numLock = true
+        if (typeof keyboard !== "undefined") keyboard.numLock = true
         if (userHelper.currentItem && userHelper.currentItem.uName) {
             root.displayUserName = userHelper.currentItem.uName.toUpperCase()
         } else if (typeof userModel !== "undefined" && userModel.lastUser) {
@@ -120,21 +120,23 @@ Item {
     }
     MediaPlayer {
         id: player
+        autoPlay: true
         source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"
         videoOutput: bgVideo
         loops: MediaPlayer.Infinite
-        Component.onCompleted: player.play() 
+         
     }
     Image {
         anchors.fill: parent
         visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         z: -499
     }
 
     VideoOutput {
+        visible: root.overrideBg === "" || (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
         id: bgVideo
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop

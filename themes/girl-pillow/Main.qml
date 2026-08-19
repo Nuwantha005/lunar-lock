@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Window
+import QtMultimedia
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
 import SddmComponents 2.0
@@ -42,13 +43,30 @@ Rectangle {
 
     // Logic
     Timer { interval: 300; running: true; onTriggered: pwd.forceActiveFocus() }
-    Component.onCompleted: { fadeAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true; }
     NumberAnimation { id: fadeAnim; target: root; property: "ui"; from: 0; to: 1; duration: 1500; easing.type: Easing.OutCubic }
 
     // Background
+    MediaPlayer {
+        id: bgVideoPlayer
+        source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        videoOutput: bgVideoOutput
+        loops: MediaPlayer.Infinite
+        autoPlay: true
+    }
+
+    VideoOutput {
+        id: bgVideoOutput
+        anchors.fill: parent
+        opacity: root.ui
+        visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+        fillMode: VideoOutput.PreserveAspectCrop
+    }
+
     Image {
         anchors.fill: parent
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
+        visible: root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+        source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         opacity: root.ui

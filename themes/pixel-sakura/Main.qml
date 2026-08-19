@@ -33,7 +33,7 @@ Rectangle {
 
     Component.onCompleted: {
         entryAnim.start();
-        keyboard.numLock = true;
+        if (typeof keyboard !== "undefined") keyboard.numLock = true;
     }
 
     // Cursor Fix

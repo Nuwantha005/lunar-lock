@@ -60,8 +60,12 @@ ShellRoot {
         Loader {
             anchors.fill: parent
             source: "file://" + shellRoot.themePath + "/Main.qml"
-            
+
             onLoaded: {
+                const bgOverride = Quickshell.env("QYLOCK_OVERRIDE_BG");
+                if (item && bgOverride) {
+                    item.overrideBg = bgOverride;
+                }
                 item.forceActiveFocus()
             }
             onStatusChanged: {

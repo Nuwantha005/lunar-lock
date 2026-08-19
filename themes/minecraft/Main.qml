@@ -296,7 +296,7 @@ Rectangle {
 
     // Boot
     NumberAnimation { id: fadeIn; target: root; property: "uiOpacity"; to: 1; duration: 1000; easing.type: Easing.OutCubic }
-    Component.onCompleted: { fadeIn.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeIn.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
 
     function doLogin() { 
         var lName = (userHelper.currentItem && userHelper.currentItem.uLogin !== "") ? userHelper.currentItem.uLogin : (typeof userModel !== "undefined" ? userModel.lastUser : "")

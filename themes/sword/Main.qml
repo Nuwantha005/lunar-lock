@@ -52,7 +52,7 @@ Rectangle {
     }
 
     // Animation
-    Component.onCompleted: { fadeAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
 
     Timer { interval: 300; running: true; onTriggered: passwordField.forceActiveFocus() }
 

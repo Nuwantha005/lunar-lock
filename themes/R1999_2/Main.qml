@@ -57,20 +57,23 @@ Item {
     Rectangle { anchors.fill: parent; color: "#000000"; z: -1000 }
     
     MediaPlayer { 
-        id: player; source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"; videoOutput: bgVideo; loops: MediaPlayer.Infinite
-        Component.onCompleted: player.play()
+        id: player
+        autoPlay: true; source: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv")) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.mp4"; videoOutput: bgVideo; loops: MediaPlayer.Infinite
+        
     }
     
     Image {
         anchors.fill: parent
         visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         z: -499
     }
 
-    VideoOutput { id: bgVideo; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop; z: -500 }
+    VideoOutput {
+        visible: root.overrideBg === "" || (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
+        id: bgVideo; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop; z: -500 }
     
     Rectangle { 
         id: dimOverlay
@@ -329,5 +332,5 @@ Item {
     Keys.onReturnPressed: (event) => { if (!root.interactionMode) { startInteraction(); event.accepted = true } }
     Keys.onEnterPressed: (event) => { if (!root.interactionMode) { startInteraction(); event.accepted = true } }
     Keys.onPressed: (event) => { if (!root.interactionMode) { if (event.text.length > 0 && event.text[0].match(/[a-z0-9]/i)) { startInteraction(); event.accepted = true } } }
-    Component.onCompleted: keyboard.numLock = true
+    Component.onCompleted: if (typeof keyboard !== "undefined") keyboard.numLock = true
 }

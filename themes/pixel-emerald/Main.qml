@@ -39,7 +39,7 @@ Rectangle {
 
     Timer { interval: 300; running: true; onTriggered: pwd.forceActiveFocus() }
 
-    Component.onCompleted: { entryAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { entryAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
     ParallelAnimation {
         id: entryAnim
         NumberAnimation { target: root; property: "ui"; from: 0; to: 1; duration: 1200; easing.type: Easing.OutCubic }

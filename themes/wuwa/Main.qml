@@ -63,12 +63,14 @@ Rectangle {
         Image {
             anchors.fill: parent
             visible: root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
-            source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
             z: -499
         }
-        VideoOutput { id: bgVideoOutput; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop }
+        VideoOutput {
+        visible: root.overrideBg === "" || (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv"))
+        id: bgVideoOutput; anchors.fill: parent; fillMode: VideoOutput.PreserveAspectCrop }
 
         Rectangle {
             anchors.fill: parent
@@ -302,5 +304,5 @@ Rectangle {
     }
 
     Timer { interval: 300; running: true; onTriggered: passIn.forceActiveFocus() }
-    Component.onCompleted: keyboard.numLock = true
+    Component.onCompleted: if (typeof keyboard !== "undefined") keyboard.numLock = true
 }

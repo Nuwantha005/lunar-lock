@@ -63,7 +63,7 @@ Rectangle {
 
     // Auto-focus fix for Quickshell (Loader does not propagate focus: true)
     Timer { interval: 300; running: true; onTriggered: pwInput.forceActiveFocus() }
-    Component.onCompleted: keyboard.numLock = true
+    Component.onCompleted: if (typeof keyboard !== "undefined") keyboard.numLock = true
 
     Timer {
         interval: 1000; running: true; repeat: true

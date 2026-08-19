@@ -34,7 +34,7 @@ Rectangle {
     ListView { id: userHelper;    model: typeof userModel    !== "undefined" ? userModel    : null; currentIndex: root.userIndex;    opacity: 0; width: 1; height: 1; delegate: Item { property string uName: model.realName || model.name || ""; property string uLogin: model.name || "" } }
 
     Timer { interval: 300; running: true; onTriggered: pwd.forceActiveFocus() }
-    Component.onCompleted: { fadeAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
     NumberAnimation { id: fadeAnim; target: root; property: "ui"; from: 0; to: 1; duration: 1400; easing.type: Easing.OutCubic }
 
     // Background

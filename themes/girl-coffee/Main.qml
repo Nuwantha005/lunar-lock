@@ -2,6 +2,7 @@ import Qt.labs.folderlistmodel
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Window
+import QtMultimedia
 import SddmComponents 2.0
 
 // Theme
@@ -42,7 +43,7 @@ Rectangle {
     width: Screen.width
     height: Screen.height
     color: "#6eb3ac"
-    Component.onCompleted: { fadeAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true; }
 
     FolderListModel {
         id: fontFolder
@@ -108,9 +109,25 @@ Rectangle {
     }
 
     // Background
+    MediaPlayer {
+        id: bgVideoPlayer
+        source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+        videoOutput: bgVideoOutput
+        loops: MediaPlayer.Infinite
+        autoPlay: true
+    }
+
+    VideoOutput {
+        id: bgVideoOutput
+        anchors.fill: parent
+        visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+        fillMode: VideoOutput.PreserveAspectCrop
+    }
+
     Image {
         anchors.fill: parent
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
+        visible: root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+        source: (root.overrideBg !== "" && !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop
         smooth: true
     }

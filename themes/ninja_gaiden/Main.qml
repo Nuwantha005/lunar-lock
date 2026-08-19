@@ -597,7 +597,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        keyboard.numLock = true
+        if (typeof keyboard !== "undefined") keyboard.numLock = true
         if (typeof userModel !== "undefined" && userModel.lastIndex >= 0) root.currentUserIndex = userModel.lastIndex
         pwInput.forceActiveFocus()
     }

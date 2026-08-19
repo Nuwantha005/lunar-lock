@@ -53,7 +53,7 @@ Rectangle {
     }
 
     // Animation
-    Component.onCompleted: { bootAnim.start(); keyboard.numLock = true }
+    Component.onCompleted: { bootAnim.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
 
     Timer { interval: 300; running: true; onTriggered: inputFocus.forceActiveFocus() }
 

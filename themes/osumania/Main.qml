@@ -136,7 +136,7 @@ Rectangle {
 
     // Fade in
     property real uiOpacity: 0
-    Component.onCompleted: { fadeIn.start(); keyboard.numLock = true }
+    Component.onCompleted: { fadeIn.start(); if (typeof keyboard !== "undefined") keyboard.numLock = true }
     NumberAnimation { id:fadeIn; target:root; property:"uiOpacity"; from:0; to:1; duration:400; easing.type:Easing.OutCubic }
 
     // Background
