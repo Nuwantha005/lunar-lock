@@ -1,3 +1,4 @@
+import QtMultimedia
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Templates 2.15 as T
@@ -231,10 +232,27 @@ Rectangle {
     }
 
     // Background Image
+        MediaPlayer {
+            id: customBgVideoPlayer
+            source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            videoOutput: customBgVideoOutput
+            loops: MediaPlayer.Infinite
+            autoPlay: true
+        }
+
+        VideoOutput {
+            id: customBgVideoOutput
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+            fillMode: VideoOutput.PreserveAspectCrop
+            opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+        }
+
     Image {
+        visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
         id: bgImage
         anchors.fill: parent
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : root.bgFiles[root.bgIndex]
+        source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : root.bgFiles[root.bgIndex]
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         opacity: root.loginSuccess ? 0.15 : (root.gameActive ? 0.3 : 0.65)

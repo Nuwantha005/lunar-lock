@@ -1,5 +1,6 @@
 // Header imports
 import QtQuick
+import QtMultimedia
 import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
@@ -78,9 +79,26 @@ Rectangle {
     NumberAnimation { id: fadeAnim; target: root; property: "ui"; from: 0; to: 1; duration: 1500; easing.type: Easing.OutCubic }
 
     // Backdrop image
+        MediaPlayer {
+            id: customBgVideoPlayer
+            source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            videoOutput: customBgVideoOutput
+            loops: MediaPlayer.Infinite
+            autoPlay: true
+        }
+
+        VideoOutput {
+            id: customBgVideoOutput
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+            fillMode: VideoOutput.PreserveAspectCrop
+            opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+        }
+
     Image {
+        visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
         anchors.fill: parent
-        source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
+        source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
         fillMode: Image.PreserveAspectCrop
         asynchronous: true
         opacity: root.ui

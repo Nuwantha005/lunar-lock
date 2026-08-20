@@ -1,4 +1,5 @@
 import QtQuick
+import QtMultimedia
 import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
@@ -60,7 +61,24 @@ Rectangle {
     NumberAnimation { id: bootAnim; target: root; property: "fadeIn"; from: 0; to: 1; duration: 700; easing.type: Easing.OutCubic }
 
     // Visuals
-    Image { id: bg; anchors.fill: parent; source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "background.png"; fillMode: Image.PreserveAspectCrop; opacity: root.fadeIn }
+        MediaPlayer {
+            id: customBgVideoPlayer
+            source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            videoOutput: customBgVideoOutput
+            loops: MediaPlayer.Infinite
+            autoPlay: true
+        }
+
+        VideoOutput {
+            id: customBgVideoOutput
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+            fillMode: VideoOutput.PreserveAspectCrop
+            opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+        }
+
+    Image {
+        visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi")) id: bg; anchors.fill: parent; source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "background.png"; fillMode: Image.PreserveAspectCrop; opacity: root.fadeIn }
 
     RadialGradient {
         anchors.fill: parent; opacity: 0.35 * root.fadeIn

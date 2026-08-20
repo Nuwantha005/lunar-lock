@@ -1,4 +1,5 @@
 import QtQuick
+import QtMultimedia
 import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
@@ -99,9 +100,26 @@ Rectangle {
     // Scene
     Item {
         id: bgScene; anchors.fill: parent; clip: true
+            MediaPlayer {
+                id: customBgVideoPlayer
+                source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+                videoOutput: customBgVideoOutput
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+            }
+
+            VideoOutput {
+                id: customBgVideoOutput
+                anchors.fill: parent
+                visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+                fillMode: VideoOutput.PreserveAspectCrop
+                opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+            }
+
 
         Image {
-            id: bgImage; width: parent.width * 1.08; height: parent.height * 1.08; source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ("ter" + root.bgIndex + ".png"); fillMode: Image.PreserveAspectCrop; anchors.centerIn: parent
+            visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+            id: bgImage; width: parent.width * 1.08; height: parent.height * 1.08; source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ("ter" + root.bgIndex + ".png"); fillMode: Image.PreserveAspectCrop; anchors.centerIn: parent
             SequentialAnimation on x { loops: Animation.Infinite; NumberAnimation { from: -bgScene.width * 0.04; to: bgScene.width * 0.04; duration: 40000; easing.type: Easing.InOutSine } NumberAnimation { from: bgScene.width * 0.04; to: -bgScene.width * 0.04; duration: 40000; easing.type: Easing.InOutSine } }
         }
 

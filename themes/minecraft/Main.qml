@@ -1,4 +1,5 @@
 import QtQuick
+import QtMultimedia
 import QtQuick.Window
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
@@ -52,9 +53,26 @@ Rectangle {
     // Background
     Item {
         anchors.fill: parent; z: 0
+            MediaPlayer {
+                id: customBgVideoPlayer
+                source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+                videoOutput: customBgVideoOutput
+                loops: MediaPlayer.Infinite
+                autoPlay: true
+            }
+
+            VideoOutput {
+                id: customBgVideoOutput
+                anchors.fill: parent
+                visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+                fillMode: VideoOutput.PreserveAspectCrop
+                opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+            }
+
         Image {
+            visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
             anchors.fill: parent
-            source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "background.png"; fillMode: Image.PreserveAspectCrop
+            source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "background.png"; fillMode: Image.PreserveAspectCrop
             horizontalAlignment: Image.AlignHCenter; verticalAlignment: Image.AlignVCenter
             scale: 2.0; transformOrigin: Item.Center
         }
