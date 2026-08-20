@@ -38,8 +38,26 @@ Rectangle {
     NumberAnimation { id: fadeAnim; target: root; property: "ui"; from: 0; to: 1; duration: 1200; easing.type: Easing.OutCubic }
 
     // Background
+    MediaPlayer {
+            id: customBgVideoPlayer
+            source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : ""
+            videoOutput: customBgVideoOutput
+            loops: MediaPlayer.Infinite
+            autoPlay: true
+        }
+
+        VideoOutput {
+            id: customBgVideoOutput
+            anchors.fill: parent
+            visible: root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+            fillMode: VideoOutput.PreserveAspectCrop
+            opacity: typeof root.ui !== "undefined" ? root.ui : 1.0
+        }
+
     Image {
-        anchors.fill: parent; source: root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png"
+        visible: typeof root.overrideBg === "undefined" || root.overrideBg === "" || !(root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))
+        anchors.fill: parent
+        source: (root.overrideBg !== "" && (root.overrideBg.endsWith(".mp4") || root.overrideBg.endsWith(".webm") || root.overrideBg.endsWith(".mkv") || root.overrideBg.endsWith(".mov") || root.overrideBg.endsWith(".avi"))) ? "" : (root.overrideBg !== "" ? (root.overrideBg.startsWith("file://") ? root.overrideBg : ("file://" + root.overrideBg)) : "bg.png")
         fillMode: Image.PreserveAspectCrop; asynchronous: true; opacity: root.ui
     }
     Rectangle {
